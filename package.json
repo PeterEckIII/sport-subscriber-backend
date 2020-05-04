@@ -1,0 +1,15 @@
+{
+  "name": "titan_sport_subscriber_backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.mjs",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node --experimental-modules index.mjs"
+  },
+  "author": "Peter Eck",
+  "license": "ISC",
+  "dependencies": {
+    "puppeteer": "^3.0.2"
+  }
+}

@@ -1,0 +1,61 @@
+service: sport-subscriber
+
+package:
+  exclude:
+    - node_modules/**
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: dev
+  region: us-east-1
+
+functions:
+  addSubscription:
+    handler: api/subscription/addSubscription.submit
+    memorySize: 128
+    description: Add a subscription to an account
+    events:
+      - http:
+          path: addSubscription
+          method: post
+  # removeSubscription:
+  #   handler: api/subscription/removeSubscription.submit
+  #   memorySize: 128
+  #   description: Remove a subscription from an account
+  #   events:
+  #     - http:
+  #         path: removeSubscription
+  #         method: delete
+  # editSubscription:
+  #   handler: api/subscription/editSubscription.submit
+  #   memorySize: 128
+  #   description: Edit a subscription for an account
+  #   events:
+  #     - http:
+  #         path: editSubscription
+  #         method: put
+  # addUser:
+  #   handler: api/user/addUser.submit
+  #   memorySize: 128
+  #   description: Add a new user
+  #   events:
+  #     - http:
+  #         path: addUser
+  #         method: post
+  # removeUser:
+  #   handler: api/user/removeUser.submit
+  #   memorySize: 128
+  #   description: Remove a user
+  #   events:
+  #     - http:
+  #         path: removeUser
+  #         method: delete
+  # editUser:
+  #   handler: api/user/editUser.submit
+  #   memorySize: 128
+  #   description: Edit a user
+  #   events:
+  #     - http:
+  #         path: editUser
+  #         method: put

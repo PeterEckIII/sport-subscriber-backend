@@ -48,6 +48,8 @@ const scrape = async (url) => {
       locations
     )
   );
+
+  await browser.close();
 };
 
 export default scrape;

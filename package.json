@@ -2,14 +2,20 @@
   "name": "sport-subscriber",
   "version": "1.0.0",
   "description": "",
-  "main": "index.mjs",
+  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node --experimental-modules index.mjs"
+    "test": "serverless-bundle test",
+    "start": "node index.js"
   },
   "author": "Peter Eck",
   "license": "ISC",
   "dependencies": {
-    "puppeteer": "^3.0.2"
+    "bcrypt": "^4.0.1",
+    "bluebird": "^3.7.2",
+    "puppeteer": "^3.0.2",
+    "uuid": "^8.0.0"
+  },
+  "devDependencies": {
+    "serverless-bundle": "^1.4.0"
   }
 }

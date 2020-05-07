@@ -1,48 +1,58 @@
 service: sport-subscriber
 
 package:
-  exclude:
-    - node_modules/**
+  individually: true
 
 provider:
   name: aws
   runtime: nodejs12.x
-  stage: dev
+  stage: ${opt:stage, 'dev'}
   region: us-east-1
+  environment:
+    USER_TABLE: ${self:service}-${opt:stage, 'dev'}-user_table
+  iAmRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource: "*"
+
+plugins:
+  - serverless-bundle
+
+resources:
+  Resources:
+    userTable:
+      Type: "AWS::DynamoDB::Table"
+      DeletionPolicy: Delete
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: "id"
+            AttributeType: "S"
+        KeySchema:
+          - AttributeName: "id"
+            KeyType: "HASH"
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        StreamSpecification:
+          StreamViewType: "NEW_AND_OLD_IMAGES"
+        TableName: ${self:provider.environment.USER_TABLE}
 
 functions:
-  addSubscription:
-    handler: api/subscription/addSubscription.submit
+  addUser:
+    handler: api/user/addUser.submit
     memorySize: 128
-    description: Add a subscription to an account
+    description: Add a new user
     events:
       - http:
-          path: addSubscription
+          cors: true
+          path: /addUser
           method: post
-  # removeSubscription:
-  #   handler: api/subscription/removeSubscription.submit
-  #   memorySize: 128
-  #   description: Remove a subscription from an account
-  #   events:
-  #     - http:
-  #         path: removeSubscription
-  #         method: delete
-  # editSubscription:
-  #   handler: api/subscription/editSubscription.submit
-  #   memorySize: 128
-  #   description: Edit a subscription for an account
-  #   events:
-  #     - http:
-  #         path: editSubscription
-  #         method: put
-  # addUser:
-  #   handler: api/user/addUser.submit
-  #   memorySize: 128
-  #   description: Add a new user
-  #   events:
-  #     - http:
-  #         path: addUser
-  #         method: post
   # removeUser:
   #   handler: api/user/removeUser.submit
   #   memorySize: 128
@@ -59,3 +69,44 @@ functions:
   #     - http:
   #         path: editUser
   #         method: put
+  ## SUBSCRIPTION
+  # addSubscription:
+  #   handler: api/subscription/addSubscription.submit
+  #   memorySize: 128
+  #   description: Add a subscription to an account
+  #   events:
+  #     - http:
+  #         path: addSubscription
+  #         method: post
+  # removeSubscription:
+  #   handler: api/subscription/removeSubscription.submit
+  #   memorySize: 128
+  #   description: Remove a subscription from an account
+  #   events:
+  #     - http:
+  #         path: removeSubscription
+  #         method: delete
+  # editSubscription:
+  #   handler: api/subscription/editSubscription.submit
+  #   memorySize: 128
+  #   description: Edit a subscription for an account
+  #   events:
+  #     - http:
+  #         path: editSubscription
+  #         method: put
+  # SubscriptionDynamoDbTable:
+  #   Type: "AWS::DynamoDB::Table"
+  #   DeletionPolicy: Retain
+  #   Properties:
+  #     AttributeDefinitions:
+  #       - AttributeName: "subscriptionId"
+  #         AttributeType: "S"
+  #     KeySchema:
+  #       - AttributeName: "subscriptionId"
+  #         KeyType: "HASH"
+  #     ProvisionedThroughput:
+  #       ReadCapacityUnits: 1
+  #       WriteCapacityUnits: 1
+  #     StreamSpecification:
+  #       StreamViewType: "NEW_AND_OLD_IMAGES"
+  #     TableName: ${self:provider.environment.SUBSCRIPTION_TABLE}

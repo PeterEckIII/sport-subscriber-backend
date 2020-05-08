@@ -43,25 +43,24 @@ exports.submit = async (event, _, callback) => {
     }
 };
 
-const submitUser = (user, callback) => {
+const submitUser = async (user, callback) => {
     console.log(`Submitting user...`);
     const userInfo = {
         TableName: process.env.USER_TABLE,
         Item: user
     };
-    return dynamoDb
-        .put(userInfo)
-        .promise()
-        .then(res => res)
-        .catch(err => {
-            console.warn(err);
-            callback(null, {
-                statusCode: 500,
-                body: JSON.stringify({
-                    message: `Unable to add user '${ user.username } with error ${ err }'`
-                })
-            });
+    try {
+        const response = await dynamoDb.put(userInfo);
+        return response;
+    } catch (err) {
+        console.warn(err);
+        callback(null, {
+            statusCode: 500,
+            body: JSON.stringify({
+                message: `Unable to add user '${ user.username } with error ${ err }'`
+            })
         });
+    }
 };
 
 const userInfo = (username, email, password) => {

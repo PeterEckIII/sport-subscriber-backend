@@ -10,16 +10,9 @@ provider:
   region: us-east-1
   environment:
     USER_TABLE: ${self:service}-${opt:stage, 'dev'}-user_table
-  iAmRoleStatements:
-    - Effect: Allow
-      Action:
-        - dynamodb:Query
-        - dynamodb:Scan
-        - dynamodb:GetItem
-        - dynamodb:PutItem
-        - dynamodb:UpdateItem
-        - dynamodb:DeleteItem
-      Resource: "*"
+  role: arn:aws:iam::964575162768:role/Sports-Subscriber-LambdaRole
+  iamManagedPolicies:
+    - arn:aws:iam::964575162768:policy/Sports-Subscriber-LambdaPolicy
 
 plugins:
   - serverless-bundle

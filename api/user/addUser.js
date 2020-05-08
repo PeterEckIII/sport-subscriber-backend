@@ -5,7 +5,7 @@ AWS.config.setPromisesDependency(require('bluebird'));
 
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
 
-module.exports.submit = async (event, _, callback) => {
+exports.submit = async (event, _, callback) => {
     const body = JSON.parse(event.body);
     const { username, email, password } = body;
     if (typeof username !== 'string' || typeof email !== 'string' || typeof password !== 'string') {
@@ -22,8 +22,14 @@ module.exports.submit = async (event, _, callback) => {
             },
             statusCode: 200,
             body: JSON.stringify({
-                message: `Successfully added user ${ username } with email ${ email }`,
-                userId: `${ result.id }`
+                message: `Successfully added user ${ result.username } with email ${ result.email }`,
+                user: {
+                    "id": result.id,
+                    "username": result.username,
+                    "email": result.email,
+                    "createdAt": result.createdAt,
+                    "updatedAt": result.updatedAt
+                }
             })
         });
     } catch (err) {
@@ -31,7 +37,7 @@ module.exports.submit = async (event, _, callback) => {
         callback(null, {
             statusCode: 500,
             body: JSON.stringify({
-                message: `Unable to add user ${ username }`
+                message: `Unable to add user ${ username } because of ${ err }`
             })
         });
     }
@@ -46,13 +52,13 @@ const submitUser = (user, callback) => {
     return dynamoDb
         .put(userInfo)
         .promise()
-        .then(_ => user)
+        .then(res => res)
         .catch(err => {
             console.warn(err);
             callback(null, {
                 statusCode: 500,
                 body: JSON.stringify({
-                    message: `Unable to add user`
+                    message: `Unable to add user '${ user.username } with error ${ err }'`
                 })
             });
         });

@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "serverless-bundle test",
-    "start": "node index.js"
+    "start": "node index.js",
+    "deploy:dev": "sls deploy --stage dev -v",
+    "deploy:prod": "sls deploy --stage prod -v"
   },
   "author": "Peter Eck",
   "license": "ISC",

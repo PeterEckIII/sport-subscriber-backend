@@ -1,7 +1,9 @@
-const scrape = require("./scrape.js");
+const serverless = require('serverless-http');
+const express = require('express');
+const app = express();
 
-// console.log("Football Games: ");
-// scrape("https://www.iwusports.com/sports/football/schedule");
+app.get('/', (req, res) => {
+    res.send('Hello World!');
+});
 
-console.log("Basketball Games: ");
-scrape("https://www.iwusports.com/sports/womens-basketball/schedule");
+exports.handler = serverless(app);

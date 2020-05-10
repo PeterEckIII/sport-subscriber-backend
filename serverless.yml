@@ -37,6 +37,11 @@ resources:
         TableName: ${self:provider.environment.USER_TABLE}
 
 functions:
+  app:
+    handler: index.handler
+    events:
+      - http: ANY /
+      - http: "ANY {proxy+}"
   addUser:
     handler: api/user/addUser.submit
     memorySize: 128

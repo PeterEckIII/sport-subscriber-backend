@@ -5,17 +5,28 @@ const app = express();
 const uuid = require('uuid');
 const AWS = require('aws-sdk');
 
+// CONFIGURATION
 AWS.config.setPromisesDependency(require('bluebird'));
-
-const dynamoDb = new AWS.DynamoDB.DocumentClient();
-
 app.use(bodyParser.json({ strict: false }));
 
+const IS_OFFLINE = process.env.IS_OFFLINE;
+let dynamoDb;
+if (IS_OFFLINE === 'true') {
+    dynamoDb = new AWS.DynamoDB.DocumentClient({
+        region: 'localhost',
+        endpoint: 'http://localhost:3001'
+    });
+    console.log(dynamoDb);
+} else {
+    dynamoDb = new AWS.DynamoDB.DocumentClient();
+}
+
+// ROUTES
 app.get('/', (req, res) => {
     res.send('Hello World!');
 });
 
-app.get('/users/:id', async (req, res) => {
+app.get('/users/:id', (req, res) => {
     const params = {
         TableName: process.env.USER_TABLE,
         Key: {
@@ -23,22 +34,24 @@ app.get('/users/:id', async (req, res) => {
         },
     };
 
-    await dynamoDb.get(params, (err, res) => {
-        if (err) {
-            console.error(err);
-            res.status(400).json({ error: 'Could not get user' });
-        }
-        if (res.Item) {
-            const { id, name } = res.Item;
-            res.json({ id, name });
-        } else {
-            res.status(404).json({ error: 'User not found' });
-        }
-
-    });
+    dynamoDb
+        .get(params)
+        .promise()
+        .then(data => {
+            res.status(201).json({
+                message: 'Success, user listed below',
+                user: data
+            });
+        })
+        .catch(err => {
+            res.status(400).json({
+                message: 'Error finding users',
+                error: err
+            });
+        });
 });
 
-app.post('/users', async (req, res) => {
+app.post('/users', (req, res) => {
     const { username, email, password } = req.body;
     if (typeof username !== 'string' || typeof email !== 'string' || typeof password !== 'string') {
         console.error('Validation Failed');
@@ -57,24 +70,27 @@ app.post('/users', async (req, res) => {
         createdAt: timestamp,
         updatedAt: timestamp
     };
-    try {
-        const userInfo = {
-            TableName: process.env.USER_TABLE,
-            Item: newUser
-        };
-        const response = await dynamoDb.put(userInfo);
-        if (response) {
-            res.json({ message: 'Success', username, email });
-        } else {
-            res.status(500).json({ error: 'AWS Server Error' });
-        }
-    } catch (err) {
-        console.log(`Error adding user with Error: ${ err }`);
-        res.status(400).json({
-            message: 'Could not create user',
-            error: err
+    const newUserInfo = {
+        TableName: process.env.USER_TABLE,
+        Item: newUser
+    };
+    dynamoDb.put(newUserInfo)
+        .promise()
+        .then(data => {
+            res.status(201).json({
+                message: 'Success adding user',
+                email: data.email,
+                id: data.id,
+                username: data.username
+            });
+        })
+        .catch(err => {
+            console.log(`Error adding user with Error: ${ err }`);
+            res.status(400).json({
+                message: 'Could not create user',
+                error: err
+            });
         });
-    }
 });
 
 exports.handler = serverless(app);

@@ -6,7 +6,7 @@
   "scripts": {
     "test": "serverless-bundle test",
     "start": "node index.js",
-    "deploy:dev": "sls deploy --stage dev -v",
+    "deploy:dev": "sls dynamodb install && sls offline start --stage dev -v",
     "deploy:prod": "sls deploy --stage prod -v"
   },
   "author": "Peter Eck",
@@ -21,6 +21,8 @@
     "uuid": "^8.0.0"
   },
   "devDependencies": {
-    "serverless-bundle": "^1.4.0"
+    "serverless-bundle": "^1.4.0",
+    "serverless-dynamodb-local": "^0.2.39",
+    "serverless-offline": "^6.1.5"
   }
 }

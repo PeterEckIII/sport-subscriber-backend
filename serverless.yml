@@ -16,6 +16,14 @@ provider:
 
 plugins:
   - serverless-bundle
+  - serverless-offline
+  - serverless-dynamodb-local
+
+custom:
+  tableName: ${self:service}-${opt:stage, 'dev'}-user_table
+  dynamodb:
+    start:
+      migrate: true
 
 resources:
   Resources:
@@ -43,30 +51,23 @@ functions:
       - http: ANY /
       - http: "ANY {proxy+}"
   addUser:
-    handler: api/user/addUser.submit
+    handler: index.handler
     memorySize: 128
     description: Add a new user
     events:
-      - http:
-          cors: true
-          path: /addUser
-          method: post
-  # removeUser:
-  #   handler: api/user/removeUser.submit
-  #   memorySize: 128
-  #   description: Remove a user
-  #   events:
-  #     - http:
-  #         path: removeUser
-  #         method: delete
-  # editUser:
-  #   handler: api/user/editUser.submit
-  #   memorySize: 128
-  #   description: Edit a user
-  #   events:
-  #     - http:
-  #         path: editUser
-  #         method: put
+      - http: "POST /users"
+  removeUser:
+    handler: index.handler
+    memorySize: 128
+    description: Remove a user
+    events:
+      - http: "DELETE /users"
+  editUser:
+    handler: index.handler
+    memorySize: 128
+    description: Edit a user
+    events:
+      - http: "PUT /users/{proxy+}"
   ## SUBSCRIPTION
   # addSubscription:
   #   handler: api/subscription/addSubscription.submit

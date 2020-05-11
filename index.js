@@ -93,4 +93,44 @@ app.post('/users', (req, res) => {
         });
 });
 
+app.put('/users/:id', (req, res) => {
+    const { username, email, password } = req.body;
+    if (typeof username !== 'string' || typeof email !== 'string' || typeof password !== 'string') {
+        console.error('Validation Failed');
+        res.status(400).json({
+            error: 'Couldn\'t edit candidate because of a validation error'
+        });
+    }
+    const timestamp = new Date().getTime();
+    const params = {
+        TableName: process.env.USER_TABLE,
+        Key: {
+            id: req.params.id
+        },
+        UpdateExpression: 'SET username = :userName, email = :userEmail, hash = :userPassword, updatedAt = :updatedAt',
+        ExpressionAttributeValues: {
+            ':userName': username,
+            ':userEmail': email,
+            ':userPassword': password,
+            ':updatedAt': timestamp
+        },
+        ReturnValues: 'ALL_NEW',
+    };
+
+    dynamoDb
+        .update(params)
+        .promise()
+        .then(_ => {
+            res.status(201).json({
+                message: `Success updating record`,
+            });
+        })
+        .catch(err => {
+            res.status(401).json({
+                message: `Error updating record`,
+                error: err
+            });
+        });
+});
+
 exports.handler = serverless(app);

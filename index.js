@@ -57,7 +57,7 @@ app.post('/users', (req, res) => {
         console.error('Validation Failed');
         res.status(400).json(
             {
-                error: 'Couldn\'t submit candidate because of a validation error'
+                error: 'Couldn\'t submit user because of a validation error'
             });
     };
 
@@ -94,43 +94,68 @@ app.post('/users', (req, res) => {
 });
 
 app.put('/users/:id', (req, res) => {
-    const { username, email, password } = req.body;
+    const {
+        username,
+        email,
+        password
+    } = req.body;
+
     if (typeof username !== 'string' || typeof email !== 'string' || typeof password !== 'string') {
         console.error('Validation Failed');
         res.status(400).json({
             error: 'Couldn\'t edit candidate because of a validation error'
         });
     }
+
     const timestamp = new Date().getTime();
     const params = {
         TableName: process.env.USER_TABLE,
         Key: {
             id: req.params.id
         },
-        UpdateExpression: 'SET username = :userName, email = :userEmail, hash = :userPassword, updatedAt = :updatedAt',
+        ExpressionAttributeNames: {
+            "#h": "hash"
+        },
         ExpressionAttributeValues: {
             ':userName': username,
             ':userEmail': email,
-            ':userPassword': password,
+            ':userHash': password,
             ':updatedAt': timestamp
         },
-        ReturnValues: 'ALL_NEW',
+        UpdateExpression: 'SET username = :userName, email = :userEmail, #h = :userHash, updatedAt = :updatedAt',
+        ReturnValues: 'ALL_NEW'
     };
-
-    dynamoDb
-        .update(params)
-        .promise()
-        .then(_ => {
-            res.status(201).json({
-                message: `Success updating record`,
-            });
-        })
-        .catch(err => {
-            res.status(401).json({
-                message: `Error updating record`,
-                error: err
-            });
+    dynamoDb.update(params).promise().then(result => {
+        res.status(201).json({
+            message: `Success updating record`,
+            data: [ ...result ]
         });
+    }).catch(err => {
+        res.status(401).json({
+            message: `Error updating user`,
+            error: { ...err }
+        });
+    });
+});
+
+app.delete('/users/:id', (req, res) => {
+    const id = req.params.id;
+    const params = {
+        TableName: process.env.USER_TABLE,
+        Key: {
+            id: id
+        }
+    };
+    dynamoDb.delete(params).promise().then(data => {
+        res.status(201).json({
+            message: `Success deleting user`
+        });
+    }).catch(err => {
+        res.status(401).json({
+            message: `Error deleting user`,
+            error: err
+        });
+    });
 });
 
 exports.handler = serverless(app);

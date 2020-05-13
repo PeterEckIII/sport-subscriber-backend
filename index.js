@@ -96,43 +96,75 @@ app.post('/users', (req, res) => {
 app.put('/users/:id', (req, res) => {
     const { username, email, password } = req.body;
 
-    if (typeof username !== 'string' || typeof email !== 'string' || typeof password !== 'string') {
-        console.error('Validation Failed');
-        res.status(400).json({
-            error: 'Couldn\'t edit user because of a validation error'
-        });
-    }
+    const updateFunction = (params) => {
+        dynamoDb
+            .update(params)
+            .promise()
+            .then(result => {
+                res.status(201).json({
+                    message: `Success updating record`,
+                });
+            })
+            .catch(err => {
+                console.log(`Error adding user with Error: ${ err }`);
+                res.status(401).json({
+                    message: `Error updating user`,
+                    error: err
+                });
+            });
+    };
 
     const timestamp = new Date().getTime();
-    const params = {
+    // NOTE: CANNOT PASS EMPTY FIELDS IF YOU ARE ONLY UPDATING ONE OF THEM.
+    // EVEN THOUGH IT TECHNICALLY UPDATES THE FIELD, THE ROUTE THROWS AN ERROR ON THE PUT REQUEST.
+    // THIS WILL NEED TO BE VALIDATED HERE TO ONLY PASS ONE VARIABLE TO THE UPDATE FUNCTION BELOW.
+    const baseParams = {
         TableName: process.env.USER_TABLE,
         Key: {
-            id: req.params.id
+            "id": req.params.id
         },
-        ExpressionAttributeNames: {
-            "#h": "hash"
-        },
-        ConditionExpression: 'ATTRIBUTE_EXISTS',
-        ExpressionAttributeValues: {
-            ':userName': username,
-            ':userEmail': email,
-            ':userHash': password,
-            ':updatedAt': timestamp
-        },
-        UpdateExpression: 'SET username = :userName, email = :userEmail, #h = :userHash, updatedAt = :updatedAt',
         ReturnValues: 'ALL_NEW'
     };
-    dynamoDb.update(params).promise().then(result => {
-        res.status(201).json({
-            message: `Success updating record`,
-            data: [ ...result ]
-        });
-    }).catch(err => {
-        res.status(401).json({
-            message: `Error updating user`,
-            error: { ...err }
-        });
-    });
+    let fieldToUpdate;
+    if (typeof username === 'string') {
+        fieldToUpdate = username;
+        let params = {
+            ...baseParams,
+            ExpressionAttributeValues: {
+                ':userName': fieldToUpdate,
+                ':updatedAt': timestamp
+            },
+            UpdateExpression: 'SET username = :userName, updatedAt = :updatedAt'
+        };
+        updateFunction(params);
+    }
+    if (typeof password === 'string') {
+        fieldToUpdate = password;
+        let params = {
+            ...baseParams,
+            ExpressionAttributeValues: {
+                ':userHash': password,
+                ':updatedAt': timestamp
+            },
+            ExpressionAttributeNames: {
+                '#h': 'hash'
+            },
+            UpdateExpression: 'SET #h = :userHash, updatedAt = :updatedAt'
+        };
+        updateFunction(params);
+    }
+    if (typeof email === 'string') {
+        fieldToUpdate = email;
+        let params = {
+            ...baseParams,
+            ExpressionAttributeValues: {
+                ':userEmail': email,
+                ':updatedAt': timestamp
+            },
+            UpdateExpression: 'SET email = :userEmail, updatedAt = :updatedAt'
+        };
+        updateFunction(params);
+    }
 });
 
 app.delete('/users/:id', (req, res) => {

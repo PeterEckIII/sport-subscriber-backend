@@ -94,16 +94,12 @@ app.post('/users', (req, res) => {
 });
 
 app.put('/users/:id', (req, res) => {
-    const {
-        username,
-        email,
-        password
-    } = req.body;
+    const { username, email, password } = req.body;
 
     if (typeof username !== 'string' || typeof email !== 'string' || typeof password !== 'string') {
         console.error('Validation Failed');
         res.status(400).json({
-            error: 'Couldn\'t edit candidate because of a validation error'
+            error: 'Couldn\'t edit user because of a validation error'
         });
     }
 
@@ -116,6 +112,7 @@ app.put('/users/:id', (req, res) => {
         ExpressionAttributeNames: {
             "#h": "hash"
         },
+        ConditionExpression: 'ATTRIBUTE_EXISTS',
         ExpressionAttributeValues: {
             ':userName': username,
             ':userEmail': email,

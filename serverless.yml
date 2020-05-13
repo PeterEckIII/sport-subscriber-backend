@@ -61,7 +61,7 @@ functions:
     memorySize: 128
     description: Remove a user
     events:
-      - http: "DELETE /users"
+      - http: "DELETE /users/{proxy+}"
   editUser:
     handler: index.handler
     memorySize: 128

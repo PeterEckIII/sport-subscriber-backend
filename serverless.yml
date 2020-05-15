@@ -50,6 +50,10 @@ functions:
     events:
       - http: ANY /
       - http: "ANY {proxy+}"
+  getUser:
+    handler: index.handler
+    events:
+      - http: "GET /users/{proxy+}"
   addUser:
     handler: index.handler
     memorySize: 128
@@ -68,44 +72,3 @@ functions:
     description: Edit a user
     events:
       - http: "PUT /users/{proxy+}"
-  ## SUBSCRIPTION
-  # addSubscription:
-  #   handler: api/subscription/addSubscription.submit
-  #   memorySize: 128
-  #   description: Add a subscription to an account
-  #   events:
-  #     - http:
-  #         path: addSubscription
-  #         method: post
-  # removeSubscription:
-  #   handler: api/subscription/removeSubscription.submit
-  #   memorySize: 128
-  #   description: Remove a subscription from an account
-  #   events:
-  #     - http:
-  #         path: removeSubscription
-  #         method: delete
-  # editSubscription:
-  #   handler: api/subscription/editSubscription.submit
-  #   memorySize: 128
-  #   description: Edit a subscription for an account
-  #   events:
-  #     - http:
-  #         path: editSubscription
-  #         method: put
-  # SubscriptionDynamoDbTable:
-  #   Type: "AWS::DynamoDB::Table"
-  #   DeletionPolicy: Retain
-  #   Properties:
-  #     AttributeDefinitions:
-  #       - AttributeName: "subscriptionId"
-  #         AttributeType: "S"
-  #     KeySchema:
-  #       - AttributeName: "subscriptionId"
-  #         KeyType: "HASH"
-  #     ProvisionedThroughput:
-  #       ReadCapacityUnits: 1
-  #       WriteCapacityUnits: 1
-  #     StreamSpecification:
-  #       StreamViewType: "NEW_AND_OLD_IMAGES"
-  #     TableName: ${self:provider.environment.SUBSCRIPTION_TABLE}

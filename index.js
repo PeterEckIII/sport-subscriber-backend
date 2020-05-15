@@ -34,6 +34,7 @@ app.get('/users/:id', (req, res) => {
         },
     };
 
+
     dynamoDb
         .get(params)
         .promise()

@@ -115,9 +115,6 @@ app.put('/users/:id', (req, res) => {
     };
 
     const timestamp = new Date().getTime();
-    // NOTE: CANNOT PASS EMPTY FIELDS IF YOU ARE ONLY UPDATING ONE OF THEM.
-    // EVEN THOUGH IT TECHNICALLY UPDATES THE FIELD, THE ROUTE THROWS AN ERROR ON THE PUT REQUEST.
-    // THIS WILL NEED TO BE VALIDATED HERE TO ONLY PASS ONE VARIABLE TO THE UPDATE FUNCTION BELOW.
     const baseParams = {
         TableName: process.env.USER_TABLE,
         Key: {

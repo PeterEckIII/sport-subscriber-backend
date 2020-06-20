@@ -1,4 +1,4 @@
-service: sport-subscriber
+service: sport-subscriber-api
 
 package:
   individually: true
@@ -50,25 +50,3 @@ functions:
     events:
       - http: ANY /
       - http: "ANY {proxy+}"
-  getUser:
-    handler: index.handler
-    events:
-      - http: "GET /users/{proxy+}"
-  addUser:
-    handler: index.handler
-    memorySize: 128
-    description: Add a new user
-    events:
-      - http: "POST /users"
-  removeUser:
-    handler: index.handler
-    memorySize: 128
-    description: Remove a user
-    events:
-      - http: "DELETE /users/{proxy+}"
-  editUser:
-    handler: index.handler
-    memorySize: 128
-    description: Edit a user
-    events:
-      - http: "PUT /users/{proxy+}"

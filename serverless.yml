@@ -9,7 +9,7 @@ provider:
   stage: ${opt:stage, 'dev'}
   region: us-east-1
   environment:
-    USER_TABLE: ${self:service}-${opt:stage, 'dev'}-user_table
+    USER_TABLE: ${self:service}-user_table-${opt:stage, 'dev'}
   role: arn:aws:iam::964575162768:role/Sports-Subscriber-LambdaRole
   iamManagedPolicies:
     - arn:aws:iam::964575162768:policy/Sports-Subscriber-LambdaPolicy
@@ -20,7 +20,7 @@ plugins:
   - serverless-dynamodb-local
 
 custom:
-  tableName: ${self:service}-${opt:stage, 'dev'}-user_table
+  tableName: ${self:provider.environment.USER_TABLE}
   dynamodb:
     start:
       migrate: true

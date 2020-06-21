@@ -40,21 +40,21 @@ app.get('/users/:id', (req, res) => {
         .promise()
         .then(data => {
             res.status(201).json({
-                message: 'Success, user listed below',
+                message: 'Success, user listed',
                 user: data
             });
         })
         .catch(err => {
             res.status(400).json({
-                message: 'Error finding users',
+                message: 'Error finding user',
                 error: err
             });
         });
 });
 
 app.post('/users', (req, res) => {
-    const { username, email, password } = req.body;
-    if (typeof username !== 'string' || typeof email !== 'string' || typeof password !== 'string') {
+    const { email, password } = req.body;
+    if (typeof email !== 'string' || typeof password !== 'string') {
         console.error('Validation Failed');
         res.status(400).json(
             {
@@ -64,8 +64,7 @@ app.post('/users', (req, res) => {
 
     const timestamp = new Date().getTime();
     const newUser = {
-        id: uuid.v1(),
-        username: username,
+        id: uuid.v4(),
         email: email,
         hash: password,
         createdAt: timestamp,
@@ -82,7 +81,6 @@ app.post('/users', (req, res) => {
                 message: 'Success adding user',
                 email: data.email,
                 id: data.id,
-                username: data.username
             });
         })
         .catch(err => {

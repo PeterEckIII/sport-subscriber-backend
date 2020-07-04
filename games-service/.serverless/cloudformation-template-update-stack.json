@@ -171,6 +171,13 @@
                     "logs:FilterLogEvents"
                   ],
                   "Resource": "*"
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "s3:*"
+                  ],
+                  "Resource": "*"
                 }
               ]
             }
@@ -199,7 +206,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/sport-subscriber-game-api/dev/1593883068471-2020-07-04T17:17:48.471Z/create.zip"
+          "S3Key": "serverless/sport-subscriber-game-api/dev/1593895051882-2020-07-04T20:37:31.882Z/create.zip"
         },
         "FunctionName": "sport-subscriber-game-api-dev-create",
         "Handler": "create.handler",
@@ -239,7 +246,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/sport-subscriber-game-api/dev/1593883068471-2020-07-04T17:17:48.471Z/update.zip"
+          "S3Key": "serverless/sport-subscriber-game-api/dev/1593895051882-2020-07-04T20:37:31.882Z/update.zip"
         },
         "FunctionName": "sport-subscriber-game-api-dev-update",
         "Handler": "update.handler",
@@ -279,7 +286,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/sport-subscriber-game-api/dev/1593883068471-2020-07-04T17:17:48.471Z/get.zip"
+          "S3Key": "serverless/sport-subscriber-game-api/dev/1593895051882-2020-07-04T20:37:31.882Z/get.zip"
         },
         "FunctionName": "sport-subscriber-game-api-dev-get",
         "Handler": "get.handler",
@@ -319,7 +326,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/sport-subscriber-game-api/dev/1593883068471-2020-07-04T17:17:48.471Z/list.zip"
+          "S3Key": "serverless/sport-subscriber-game-api/dev/1593895051882-2020-07-04T20:37:31.882Z/list.zip"
         },
         "FunctionName": "sport-subscriber-game-api-dev-list",
         "Handler": "list.handler",
@@ -359,7 +366,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/sport-subscriber-game-api/dev/1593883068471-2020-07-04T17:17:48.471Z/delete.zip"
+          "S3Key": "serverless/sport-subscriber-game-api/dev/1593895051882-2020-07-04T20:37:31.882Z/delete.zip"
         },
         "FunctionName": "sport-subscriber-game-api-dev-delete",
         "Handler": "delete.handler",
@@ -701,7 +708,7 @@
         "MethodResponses": []
       }
     },
-    "ApiGatewayDeployment1593883059424": {
+    "ApiGatewayDeployment1593895045996": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": "eoyb7j2hob",

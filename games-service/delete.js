@@ -21,7 +21,7 @@ if (IS_OFFLINE === 'true') {
     dynamoDb = new AWS.DynamoDB.DocumentClient();
 }
 
-app.delete('games/:id', (req, res) => {
+app.delete('/games/:id', (req, res) => {
     const params = {
         TableName: process.env.GAME_TABLE,
         Key: {
@@ -33,12 +33,12 @@ app.delete('games/:id', (req, res) => {
         .promise()
         .then(data => {
             res.status(201).json({
-                message: 'Success deleting user'
+                message: 'Success deleting game'
             });
         })
         .catch(err => {
             res.status(401).json({
-                message: 'Error deleting user',
+                message: 'Error deleting game',
                 error: err
             });
         });

@@ -237,7 +237,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/sport-subscriber-game-api/dev/1593895051882-2020-07-04T20:37:31.882Z/create.zip"
+                "S3Key": "serverless/sport-subscriber-game-api/dev/1593895450572-2020-07-04T20:44:10.572Z/create.zip"
               },
               "FunctionName": "sport-subscriber-game-api-dev-create",
               "Handler": "create.handler",
@@ -277,7 +277,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/sport-subscriber-game-api/dev/1593895051882-2020-07-04T20:37:31.882Z/update.zip"
+                "S3Key": "serverless/sport-subscriber-game-api/dev/1593895450572-2020-07-04T20:44:10.572Z/update.zip"
               },
               "FunctionName": "sport-subscriber-game-api-dev-update",
               "Handler": "update.handler",
@@ -300,14 +300,14 @@
               "UpdateLogGroup"
             ]
           },
-          "UpdateLambdaVersionAdSr628wS8evnFX1gdg5PMruovA7r3INDjZlwfr20w0": {
+          "UpdateLambdaVersionRyY7KdFsnUXdBFTXfptWv48mqKV7R8IDojz1ZNeCsU": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "UpdateLambdaFunction"
               },
-              "CodeSha256": "wxm1eI9j6qDPtyeD40swMb1n3iK4oXi1NUFP6TLQbGY="
+              "CodeSha256": "kJR16klVROtvTdK6wtP8DFEY4MstF1miQlQCNNgIsJ4="
             }
           },
           "GetLambdaFunction": {
@@ -317,7 +317,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/sport-subscriber-game-api/dev/1593895051882-2020-07-04T20:37:31.882Z/get.zip"
+                "S3Key": "serverless/sport-subscriber-game-api/dev/1593895450572-2020-07-04T20:44:10.572Z/get.zip"
               },
               "FunctionName": "sport-subscriber-game-api-dev-get",
               "Handler": "get.handler",
@@ -357,7 +357,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/sport-subscriber-game-api/dev/1593895051882-2020-07-04T20:37:31.882Z/list.zip"
+                "S3Key": "serverless/sport-subscriber-game-api/dev/1593895450572-2020-07-04T20:44:10.572Z/list.zip"
               },
               "FunctionName": "sport-subscriber-game-api-dev-list",
               "Handler": "list.handler",
@@ -397,7 +397,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/sport-subscriber-game-api/dev/1593895051882-2020-07-04T20:37:31.882Z/delete.zip"
+                "S3Key": "serverless/sport-subscriber-game-api/dev/1593895450572-2020-07-04T20:44:10.572Z/delete.zip"
               },
               "FunctionName": "sport-subscriber-game-api-dev-delete",
               "Handler": "delete.handler",
@@ -420,14 +420,14 @@
               "DeleteLogGroup"
             ]
           },
-          "DeleteLambdaVersion6Q25VTf1Z3pLUeQSeXxX2603Pg3zS3KjrHzaPm5id9w": {
+          "DeleteLambdaVersionupmEpu1jxPgyJNlnbtIuDT387IPkHsFekyCsF4amCLg": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "DeleteLambdaFunction"
               },
-              "CodeSha256": "B1XmvLsp8DS/u2zWfXAJ5N/IRYSnG1gZVNMwJMZAq+0="
+              "CodeSha256": "ykeJzGy7tAnTwDip9M/u6q3ghJ4l9cmZOwJupsposU8="
             }
           },
           "ApiGatewayResourceGames": {
@@ -739,7 +739,7 @@
               "MethodResponses": []
             }
           },
-          "ApiGatewayDeployment1593895045996": {
+          "ApiGatewayDeployment1593895443741": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": "eoyb7j2hob",
@@ -972,7 +972,7 @@
           "UpdateLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "UpdateLambdaVersionAdSr628wS8evnFX1gdg5PMruovA7r3INDjZlwfr20w0"
+              "Ref": "UpdateLambdaVersionRyY7KdFsnUXdBFTXfptWv48mqKV7R8IDojz1ZNeCsU"
             }
           },
           "GetLambdaFunctionQualifiedArn": {
@@ -990,7 +990,7 @@
           "DeleteLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "DeleteLambdaVersion6Q25VTf1Z3pLUeQSeXxX2603Pg3zS3KjrHzaPm5id9w"
+              "Ref": "DeleteLambdaVersionupmEpu1jxPgyJNlnbtIuDT387IPkHsFekyCsF4amCLg"
             }
           },
           "ServiceEndpoint": {
@@ -1197,7 +1197,7 @@
         "timeout": 6,
         "runtime": "nodejs12.x",
         "vpc": {},
-        "versionLogicalId": "UpdateLambdaVersionAdSr628wS8evnFX1gdg5PMruovA7r3INDjZlwfr20w0"
+        "versionLogicalId": "UpdateLambdaVersionRyY7KdFsnUXdBFTXfptWv48mqKV7R8IDojz1ZNeCsU"
       },
       "get": {
         "handler": "get.handler",
@@ -1317,7 +1317,7 @@
         "timeout": 6,
         "runtime": "nodejs12.x",
         "vpc": {},
-        "versionLogicalId": "DeleteLambdaVersion6Q25VTf1Z3pLUeQSeXxX2603Pg3zS3KjrHzaPm5id9w"
+        "versionLogicalId": "DeleteLambdaVersionupmEpu1jxPgyJNlnbtIuDT387IPkHsFekyCsF4amCLg"
       }
     },
     "resources": {
@@ -1357,7 +1357,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/sport-subscriber-game-api/dev/1593895051882-2020-07-04T20:37:31.882Z",
+    "artifactDirectoryName": "serverless/sport-subscriber-game-api/dev/1593895450572-2020-07-04T20:44:10.572Z",
     "artifact": ""
   }
 }

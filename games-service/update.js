@@ -21,7 +21,7 @@ if (IS_OFFLINE === 'true') {
     dynamoDb = new AWS.DynamoDB.DocumentClient();
 }
 
-app.put('games/:id', (req, res) => {
+app.put('/games/:id', (req, res) => {
     const { opponent, date, time, location, videoLink, } = req.body;
     const updateFunction = params => {
         dynamoDb

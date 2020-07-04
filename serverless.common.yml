@@ -1,0 +1,13 @@
+service: sport-subscriber-api
+
+custom:
+  stage: ${opt:stage, 'dev'}
+  resourcesStages:
+    prod: prod
+    dev: dev
+  resourcesStage: ${self:custom.resourcesStages.${self:custom.stage}, self:custom.resourcesStages.dev}
+  dynamodb:
+    start:
+      migrate: true
+  USER_TABLE: "${self:service}-user_table-${opt:stage}"
+  GAME_TABLE: "${self:service}-game_table-${opt:stage}"

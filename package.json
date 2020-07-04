@@ -1,26 +1,29 @@
 {
-  "name": "sport-subscriber",
+  "name": "titan_sport_subscriber_api",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "serverless-bundle test",
+    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
-    "deploy:dev": "sls deploy --stage dev -v",
+    "deploy:devUser": "cd users-service/ && sls deploy --stage dev -v",
+    "deploy:devGame": "cd games-service/ && sls deploy --stage dev -v",
+    "deploy:dev": "yarn deploy:devUser && yarn deploy:devGame",
     "deploy:prod": "sls deploy --stage prod -v",
     "deploy:local": "sls dynamodb install && sls offline start --stage dev -v"
   },
   "author": "Peter Eck",
   "license": "ISC",
   "dependencies": {
-    "bcrypt": "^4.0.1",
+    "serverless": "^1.73.1",
+    "serverless-http": "^2.3.2",
     "bluebird": "^3.7.2",
     "body-parser": "^1.19.0",
     "express": "^4.17.1",
-    "puppeteer": "^3.0.2",
     "serverless": "^1.73.1",
     "serverless-http": "^2.3.2",
-    "uuid": "^8.0.0"
+    "uuid": "^8.0.0",
+    "bcrypt": "^4.0.1"
   },
   "devDependencies": {
     "serverless-bundle": "^1.4.0",

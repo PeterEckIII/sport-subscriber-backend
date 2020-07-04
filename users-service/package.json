@@ -1,0 +1,15 @@
+{
+  "name": "titan_sport_subscriber_user_api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "serverless-bundle test",
+    "start": "node index.js",
+    "deploy:dev": "sls deploy --stage dev -v",
+    "deploy:prod": "sls deploy --stage prod -v",
+    "deploy:local": "sls dynamodb install && sls offline start --stage dev -v"
+  },
+  "author": "Peter Eck",
+  "license": "ISC"
+}

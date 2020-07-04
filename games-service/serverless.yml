@@ -1,0 +1,90 @@
+service: sport-subscriber-game-api
+
+package:
+  individually: true
+
+provider:
+  name: aws
+  stage: ${opt:stage, 'dev'}
+  region: us-east-1
+  apiGateway:
+    restApiId: eoyb7j2hob
+    restApiRootResourceId: neh942w8z2
+  environment:
+    GAME_TABLE: ${self:service}-game_table-${opt:stage, 'dev'}
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource:
+        Fn::GetAtt:
+          - gameTable
+          - Arn
+
+plugins:
+  - serverless-bundle
+  - serverless-offline
+  - serverless-dynamodb-local
+
+custom: ${file(../serverless.common.yml):custom}
+
+functions:
+  create:
+    handler: create.handler
+    events:
+      - http:
+          path: games
+          method: post
+          cors: true
+  update:
+    handler: update.handler
+    events:
+      - http:
+          path: games/{id}
+          method: put
+          cors: true
+  get:
+    handler: get.handler
+    events:
+      - http:
+          path: games/{id}
+          method: get
+          cors: true
+  list:
+    handler: list.handler
+    events:
+      - http:
+          path: games
+          method: get
+          cors: true
+  delete:
+    handler: delete.handler
+    events:
+      - http:
+          path: games/{id}
+          method: delete
+          cors: true
+
+resources:
+  Resources:
+    gameTable:
+      Type: "AWS::DynamoDB::Table"
+      DeletionPolicy: Delete
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: "id"
+            AttributeType: "S"
+        KeySchema:
+          - AttributeName: "id"
+            KeyType: "HASH"
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        StreamSpecification:
+          StreamViewType: "NEW_AND_OLD_IMAGES"
+        TableName: ${self:custom.GAME_TABLE}

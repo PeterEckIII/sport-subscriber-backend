@@ -25,6 +25,15 @@ provider:
         Fn::GetAtt:
           - gameTable
           - Arn
+    - Effect: "Allow"
+      Action:
+        - logs:CreateLogGroup
+        - logs:CreateLogStream
+        - logs:DescribeLogGroups
+        - logs:PutLogEvents
+        - logs:GetLogEvents
+        - logs:FilterLogEvents
+      Resource: "*"
 
 plugins:
   - serverless-bundle

@@ -22,43 +22,54 @@ if (IS_OFFLINE === 'true') {
 }
 
 app.post('/users', (req, res) => {
-    const { email, password } = req.body;
+    const { email, password, subscriptions } = req.body;
     if (typeof email !== 'string' || typeof password !== 'string') {
         console.error('Validation Failed');
         res.status(400).json(
             {
                 error: 'Couldn\'t submit user because of a validation error'
             });
-    };
-
-    const timestamp = new Date().getTime();
-    const newUser = {
-        id: uuid.v4(),
-        email: email,
-        hash: password,
-        createdAt: timestamp,
-        updatedAt: timestamp
-    };
-    const newUserInfo = {
-        TableName: process.env.USER_TABLE,
-        Item: newUser
-    };
-    dynamoDb.put(newUserInfo)
-        .promise()
-        .then(data => {
-            res.status(201).json({
-                message: 'Success adding user',
-                email: data.email,
-                id: data.id,
-            });
-        })
-        .catch(err => {
-            console.log(`Error adding user with Error: ${ err }`);
-            res.status(400).json({
-                message: 'Could not create user',
-                error: err
-            });
+    } else {
+        const selectedSubscriptions = subscriptions.map(sub => {
+            if (sub.isSubscribed) {
+                return {
+                    ...sub
+                };
+            } else {
+                return;
+            }
         });
+
+        const timestamp = new Date().getTime();
+        const newUser = {
+            id: uuid.v4(),
+            email: email,
+            password: password,
+            subscriptions: selectedSubscriptions,
+            createdAt: timestamp,
+            updatedAt: timestamp
+        };
+        const newUserInfo = {
+            TableName: process.env.USER_TABLE,
+            Item: newUser
+        };
+        dynamoDb.put(newUserInfo)
+            .promise()
+            .then(data => {
+                res.status(201).json({
+                    message: 'Success adding user',
+                    email: data.email,
+                    id: data.id,
+                });
+            })
+            .catch(err => {
+                console.log(`Error adding user with Error: ${ err }`);
+                res.status(400).json({
+                    message: 'Could not create user',
+                    error: err
+                });
+            });
+    };
 });
 
 exports.handler = serverless(app);

@@ -22,7 +22,39 @@ if (IS_OFFLINE === 'true') {
 
 
 app.put('/users/:id', (req, res) => {
-    const { username, email, password } = req.body;
+    const body = req.body;
+
+    const extractUpdateValues = body => {
+        let itemsToUpdate = {};
+        for (const param in body) {
+            console.log(`${ param }: ${ body[ param ] }`);
+            itemsToUpdate[ param ] = body[ param ];
+        }
+        console.log(`Items to update ${ itemsToUpdate }`);
+        return itemsToUpdate;
+    };
+
+    const fieldsToUpdate = extractUpdateValues(body);
+
+    const timestamp = new Date().getTime();
+
+    const generateUpdateQuery = fields => {
+        let updateParams = {
+            UpdateExpression: 'set updatedAt = :updatedAt,',
+            ExpressionAttributeValues: {
+                ':updatedAt': timestamp
+            },
+            ExpressionAttributeNames: {}
+        };
+        Object.entries(fields).forEach(([ key, item ]) => {
+            updateParams.UpdateExpression += ` #${ key } = :${ key },`;
+            updateParams.ExpressionAttributeNames[ `#${ key }` ] = key;
+            updateParams.ExpressionAttributeValues[ `:${ key }` ] = item;
+        });
+        updateParams.UpdateExpression = updateParams.UpdateExpression.slice(0, -1);
+        console.log(`DynamoDB Update Parameters: ${ updateParams }`);
+        return updateParams;
+    };
 
     const updateFunction = (params) => {
         dynamoDb
@@ -42,16 +74,26 @@ app.put('/users/:id', (req, res) => {
             });
     };
 
-    const timestamp = new Date().getTime();
+    const addedParams = generateUpdateQuery(fieldsToUpdate);
+
     const baseParams = {
         TableName: process.env.USER_TABLE,
         Key: {
             "id": req.params.id
         },
-        ReturnValues: 'ALL_NEW'
+        ...addedParams,
+        ReturnValues: 'ALL_NEW',
     };
+
+    updateFunction(baseParams);
+});
+
+exports.handler = serverless(app);
+
+/*
+
     let fieldToUpdate;
-    if (typeof username === 'string') {
+    if (typeof username !== 'undefined') {
         fieldToUpdate = username;
         let params = {
             ...baseParams,
@@ -63,7 +105,7 @@ app.put('/users/:id', (req, res) => {
         };
         updateFunction(params);
     }
-    if (typeof password === 'string') {
+    if (typeof password !== 'undefined') {
         fieldToUpdate = password;
         let params = {
             ...baseParams,
@@ -79,7 +121,7 @@ app.put('/users/:id', (req, res) => {
         updateFunction(params);
 
     }
-    if (typeof email === 'string') {
+    if (typeof email !== 'undefined') {
         fieldToUpdate = email;
         let params = {
             ...baseParams,
@@ -91,6 +133,19 @@ app.put('/users/:id', (req, res) => {
         };
         updateFunction(params);
     }
-});
-
-exports.handler = serverless(app);
+    if (typeof subscriptions === 'string') {
+        fieldToUpdate = subscriptions;
+        let params = {
+            ...baseParams,
+            ExpressionAttributeValues: {
+                ':subscriptions': subscriptions,
+                ':updatedAt': timestamp
+            },
+            ExpressionAttributeNames: {
+                '#subscriptions': 'subscriptions'
+            },
+            UpdateExpression: 'SET #subscriptions = list_append(#subscriptions, :subscriptions), updateAt = :updatedAt'
+        };
+        updateFunction(params);
+    }
+*/

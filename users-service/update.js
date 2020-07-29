@@ -27,7 +27,7 @@ app.put('/users/:id', (req, res) => {
     const extractUpdateValues = body => {
         let itemsToUpdate = {};
         for (const param in body) {
-            console.log(`${ param }: ${ body[ param ] }`);
+            console.log(`${ param }: ${ body[ param ] } (Type: ${ typeof param })`);
             itemsToUpdate[ param ] = body[ param ];
         }
         console.log(`Items to update ${ itemsToUpdate }`);
@@ -40,19 +40,30 @@ app.put('/users/:id', (req, res) => {
 
     const generateUpdateQuery = fields => {
         let updateParams = {
-            UpdateExpression: 'set updatedAt = :updatedAt,',
+            UpdateExpression: 'set updatedAt = :updatedAt, #subs = list_append(if_not_exists(#subs, :empty_list), :subscriptions)`',
             ExpressionAttributeValues: {
-                ':updatedAt': timestamp
+                ':updatedAt': timestamp,
+                ':subscriptions': fields.subscriptions,
+                ':empty_list': []
             },
-            ExpressionAttributeNames: {}
+            ExpressionAttributeNames: {
+                '#subs': 'subscriptions'
+            }
         };
-        Object.entries(fields).forEach(([ key, item ]) => {
-            updateParams.UpdateExpression += ` #${ key } = :${ key },`;
-            updateParams.ExpressionAttributeNames[ `#${ key }` ] = key;
-            updateParams.ExpressionAttributeValues[ `:${ key }` ] = item;
-        });
+        // Object.entries(fields).forEach(([ key, item ]) => {
+        //     if (key === 'subscriptions') {
+        //         updateParams.ExpressionAttributeNames[ '#subs' ] = key;
+        //         updateParams.ExpressionAttributeValues[ ':subs' ] = item;
+        //         updateParams.ExpressionAttributeValues[ ':empty_list' ] = [];
+        //         updateParams.UpdateExpression += ` #subs = list_append(if_not_exists(#subs, :empty_list), :subs)`;
+        //     } else {
+        //         updateParams.ExpressionAttributeNames[ `#${ key }` ] = key;
+        //         updateParams.ExpressionAttributeValues[ `:${ key }` ] = item;
+        //         updateParams.UpdateExpression += ` #${ key } = :${ key },`;
+        //     }
+        // });
         updateParams.UpdateExpression = updateParams.UpdateExpression.slice(0, -1);
-        console.log(`DynamoDB Update Parameters: ${ updateParams }`);
+        console.log(`DynamoDB Update Parameters: ${ JSON.stringify(updateParams) }`);
         return updateParams;
     };
 
@@ -89,63 +100,3 @@ app.put('/users/:id', (req, res) => {
 });
 
 exports.handler = serverless(app);
-
-/*
-
-    let fieldToUpdate;
-    if (typeof username !== 'undefined') {
-        fieldToUpdate = username;
-        let params = {
-            ...baseParams,
-            ExpressionAttributeValues: {
-                ':userName': fieldToUpdate,
-                ':updatedAt': timestamp
-            },
-            UpdateExpression: 'SET username = :userName, updatedAt = :updatedAt'
-        };
-        updateFunction(params);
-    }
-    if (typeof password !== 'undefined') {
-        fieldToUpdate = password;
-        let params = {
-            ...baseParams,
-            ExpressionAttributeValues: {
-                ':userHash': password,
-                ':updatedAt': timestamp
-            },
-            ExpressionAttributeNames: {
-                '#h': 'hash'
-            },
-            UpdateExpression: 'SET #h = :userHash, updatedAt = :updatedAt'
-        };
-        updateFunction(params);
-
-    }
-    if (typeof email !== 'undefined') {
-        fieldToUpdate = email;
-        let params = {
-            ...baseParams,
-            ExpressionAttributeValues: {
-                ':userEmail': email,
-                ':updatedAt': timestamp
-            },
-            UpdateExpression: 'SET email = :userEmail, updatedAt = :updatedAt'
-        };
-        updateFunction(params);
-    }
-    if (typeof subscriptions === 'string') {
-        fieldToUpdate = subscriptions;
-        let params = {
-            ...baseParams,
-            ExpressionAttributeValues: {
-                ':subscriptions': subscriptions,
-                ':updatedAt': timestamp
-            },
-            ExpressionAttributeNames: {
-                '#subscriptions': 'subscriptions'
-            },
-            UpdateExpression: 'SET #subscriptions = list_append(#subscriptions, :subscriptions), updateAt = :updatedAt'
-        };
-        updateFunction(params);
-    }
-*/

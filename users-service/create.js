@@ -2,7 +2,7 @@ const serverless = require('serverless-http');
 const bodyParser = require('body-parser');
 const express = require('express');
 const app = express();
-const uuid = require('uuid');
+const { v4: uuidv4 } = require('uuid');
 const AWS = require('aws-sdk');
 
 // CONFIGURATION
@@ -42,7 +42,7 @@ app.post('/users', (req, res) => {
 
         const timestamp = new Date().getTime();
         const newUser = {
-            id: uuid.v4(),
+            id: uuidv4(),
             email: email,
             password: password,
             subscriptions: selectedSubscriptions,
@@ -55,11 +55,10 @@ app.post('/users', (req, res) => {
         };
         dynamoDb.put(newUserInfo)
             .promise()
-            .then(data => {
+            .then(_ => {
                 res.status(201).json({
                     message: 'Success adding user',
-                    email: data.email,
-                    id: data.id,
+                    id: newUser.id
                 });
             })
             .catch(err => {

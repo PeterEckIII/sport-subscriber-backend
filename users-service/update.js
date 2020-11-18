@@ -40,28 +40,25 @@ app.put('/users/:id', (req, res) => {
 
     const generateUpdateQuery = fields => {
         let updateParams = {
-            UpdateExpression: 'set updatedAt = :updatedAt, #subs = list_append(if_not_exists(#subs, :empty_list), :subscriptions)`',
+            UpdateExpression: 'set updatedAt = :updatedAt',
             ExpressionAttributeValues: {
                 ':updatedAt': timestamp,
-                ':subscriptions': fields.subscriptions,
-                ':empty_list': []
             },
             ExpressionAttributeNames: {
-                '#subs': 'subscriptions'
             }
         };
-        // Object.entries(fields).forEach(([ key, item ]) => {
-        //     if (key === 'subscriptions') {
-        //         updateParams.ExpressionAttributeNames[ '#subs' ] = key;
-        //         updateParams.ExpressionAttributeValues[ ':subs' ] = item;
-        //         updateParams.ExpressionAttributeValues[ ':empty_list' ] = [];
-        //         updateParams.UpdateExpression += ` #subs = list_append(if_not_exists(#subs, :empty_list), :subs)`;
-        //     } else {
-        //         updateParams.ExpressionAttributeNames[ `#${ key }` ] = key;
-        //         updateParams.ExpressionAttributeValues[ `:${ key }` ] = item;
-        //         updateParams.UpdateExpression += ` #${ key } = :${ key },`;
-        //     }
-        // });
+        Object.entries(fields).forEach(([ key, item ]) => {
+            if (key === 'subscriptions') {
+                updateParams.ExpressionAttributeNames[ '#subs' ] = key;
+                updateParams.ExpressionAttributeValues[ ':subscriptions' ] = item;
+                updateParams.ExpressionAttributeValues[ ':empty_list' ] = [];
+                updateParams.UpdateExpression += ` #subs = list_append(if_not_exists(#subs, :empty_list), :subscriptions)`;
+            } else {
+                updateParams.ExpressionAttributeNames[ `#${ key }` ] = key;
+                updateParams.ExpressionAttributeValues[ `:${ key }` ] = item;
+                updateParams.UpdateExpression += ` #${ key } = :${ key },`;
+            }
+        });
         updateParams.UpdateExpression = updateParams.UpdateExpression.slice(0, -1);
         console.log(`DynamoDB Update Parameters: ${ JSON.stringify(updateParams) }`);
         return updateParams;

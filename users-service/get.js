@@ -35,7 +35,7 @@ app.get('/users/:id', (req, res) => {
         .then(data => {
             res.status(201).json({
                 message: 'Success, user listed',
-                user: data
+                user: {id: data.Item.id, subscriptions: data.Item.subscriptions}
             });
         })
         .catch(err => {

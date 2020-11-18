@@ -237,7 +237,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/sport-subscriber-game-api/dev/1593895450572-2020-07-04T20:44:10.572Z/create.zip"
+                "S3Key": "serverless/sport-subscriber-game-api/dev/1605462961187-2020-11-15T17:56:01.187Z/create.zip"
               },
               "FunctionName": "sport-subscriber-game-api-dev-create",
               "Handler": "create.handler",
@@ -277,7 +277,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/sport-subscriber-game-api/dev/1593895450572-2020-07-04T20:44:10.572Z/update.zip"
+                "S3Key": "serverless/sport-subscriber-game-api/dev/1605462961187-2020-11-15T17:56:01.187Z/update.zip"
               },
               "FunctionName": "sport-subscriber-game-api-dev-update",
               "Handler": "update.handler",
@@ -317,7 +317,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/sport-subscriber-game-api/dev/1593895450572-2020-07-04T20:44:10.572Z/get.zip"
+                "S3Key": "serverless/sport-subscriber-game-api/dev/1605462961187-2020-11-15T17:56:01.187Z/get.zip"
               },
               "FunctionName": "sport-subscriber-game-api-dev-get",
               "Handler": "get.handler",
@@ -357,7 +357,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/sport-subscriber-game-api/dev/1593895450572-2020-07-04T20:44:10.572Z/list.zip"
+                "S3Key": "serverless/sport-subscriber-game-api/dev/1605462961187-2020-11-15T17:56:01.187Z/list.zip"
               },
               "FunctionName": "sport-subscriber-game-api-dev-list",
               "Handler": "list.handler",
@@ -397,7 +397,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/sport-subscriber-game-api/dev/1593895450572-2020-07-04T20:44:10.572Z/delete.zip"
+                "S3Key": "serverless/sport-subscriber-game-api/dev/1605462961187-2020-11-15T17:56:01.187Z/delete.zip"
               },
               "FunctionName": "sport-subscriber-game-api-dev-delete",
               "Handler": "delete.handler",
@@ -420,14 +420,14 @@
               "DeleteLogGroup"
             ]
           },
-          "DeleteLambdaVersionupmEpu1jxPgyJNlnbtIuDT387IPkHsFekyCsF4amCLg": {
+          "DeleteLambdaVersionKfI98WtH8263uvOvKIFlepMNFGJGmqWf324ORMM7k": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "DeleteLambdaFunction"
               },
-              "CodeSha256": "ykeJzGy7tAnTwDip9M/u6q3ghJ4l9cmZOwJupsposU8="
+              "CodeSha256": "KEssUR5gJQk+6wEBzaWerspnvyUhs5zCd6P29ZuHx4w="
             }
           },
           "ApiGatewayResourceGames": {
@@ -739,7 +739,7 @@
               "MethodResponses": []
             }
           },
-          "ApiGatewayDeployment1593895443741": {
+          "ApiGatewayDeployment1605462953028": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": "eoyb7j2hob",
@@ -990,7 +990,7 @@
           "DeleteLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "DeleteLambdaVersionupmEpu1jxPgyJNlnbtIuDT387IPkHsFekyCsF4amCLg"
+              "Ref": "DeleteLambdaVersionKfI98WtH8263uvOvKIFlepMNFGJGmqWf324ORMM7k"
             }
           },
           "ServiceEndpoint": {
@@ -1317,7 +1317,7 @@
         "timeout": 6,
         "runtime": "nodejs12.x",
         "vpc": {},
-        "versionLogicalId": "DeleteLambdaVersionupmEpu1jxPgyJNlnbtIuDT387IPkHsFekyCsF4amCLg"
+        "versionLogicalId": "DeleteLambdaVersionKfI98WtH8263uvOvKIFlepMNFGJGmqWf324ORMM7k"
       }
     },
     "resources": {
@@ -1357,7 +1357,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/sport-subscriber-game-api/dev/1593895450572-2020-07-04T20:44:10.572Z",
+    "artifactDirectoryName": "serverless/sport-subscriber-game-api/dev/1605462961187-2020-11-15T17:56:01.187Z",
     "artifact": ""
   }
 }

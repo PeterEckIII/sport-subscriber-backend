@@ -2,7 +2,6 @@ const serverless = require('serverless-http');
 const bodyParser = require('body-parser');
 const express = require('express');
 const app = express();
-const { v4: uuidv4 } = require('uuid');
 const AWS = require('aws-sdk');
 
 // CONFIGURATION
@@ -22,7 +21,7 @@ if (IS_OFFLINE === 'true') {
 }
 
 app.post('/users', (req, res) => {
-    const { email, password, subscriptions } = req.body;
+    const { id, email, password, subscriptions } = req.body;
     if (typeof email !== 'string' || typeof password !== 'string') {
         console.error('Validation Failed');
         res.status(400).json(
@@ -42,7 +41,7 @@ app.post('/users', (req, res) => {
 
         const timestamp = new Date().getTime();
         const newUser = {
-            id: uuidv4(),
+            id: id,
             email: email,
             password: password,
             subscriptions: selectedSubscriptions,

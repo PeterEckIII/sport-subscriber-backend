@@ -23,7 +23,7 @@
     "serverless": "^1.73.1",
     "serverless-http": "^2.3.2",
     "uuid": "^8.0.0",
-    "bcrypt": "^4.0.1"
+    "bcrypt": "^5.0.0"
   },
   "devDependencies": {
     "serverless-bundle": "^1.4.0",
